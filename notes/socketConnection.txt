@@ -1,0 +1,59 @@
+//========= app.js===============
+//===================================
+var app = require('express')();
+var http = require('http').Server(app);
+
+const { constants } = require('buffer');
+var path = require('path');
+var io = require('socket.io')(http);
+
+app.get('/', (req, res) => {
+  var options = {
+    root: path.join(__dirname)
+  }
+  var fileName = 'index.html';
+  res.sendFile(fileName, options);
+})
+
+
+// root file me hi cjheck karna hota hai
+// agar spelling mistake huaa to front end se connect nahi hoga....
+
+io.on('connection', (socket) => {
+  console.log('A user connected...')
+
+
+  // agar disconnect huaa to...
+  socket.on('disconnect', () => {
+    console.log('A user is disconnected.. ')
+  })
+})
+
+
+http.listen(3000, () => {
+  console.log('Server ready on 3000');
+})
+//==================================
+
+//========= index.html===============
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js"
+      integrity="sha512-VJ6+sp2E5rFQk05caiXXzQd1wBABpjEj1r5kMiLmGAAgwPItw1YpqsCCBtq8Yr1x6C49/mTpRdXtq8O2RcZhlQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <h1>Hello world....</h1>
+    <script>
+      const socket = io();
+    </script>
+  </body>
+</html>
